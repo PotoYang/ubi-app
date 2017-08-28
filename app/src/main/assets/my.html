@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <!--手机端显示不允许缩放-->
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <!--开启对webapp支持-->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!--重置样式-->
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <!--style样式-->
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <!--vue.js-->
+    <!--<script src="https://unpkg.com/vue"></script>-->
+    <title>我的</title>
+</head>
+
+<body style="background: #f2f3f2;">
+<header>
+    <p>
+        <img src="images/back.png" class="left" />
+        <span>我的</span>
+    </p>
+</header>
+<div class="mine-wrapper" id="wrapper">
+    <ul id="list" v-for="list in todos">
+        <li>
+            <p class="heigh"><span class="mine-bian">订单号：</span><span class="mine-num">1029245476541554</span></p>
+            <div class="heigh disnone clear">
+                <p class="p-1"><span class="mine-bian">金&nbsp;&nbsp; 额：</span><span class="mine-num red">10000.00</span></p>
+                <p class="p-2"><span class="mine-bian">日&nbsp;&nbsp; 期：</span><span class="mine-num">2017-07-07 16:14:21</span></p>
+            </div>
+            <p class="heigh"><span class="mine-bian">内&nbsp;&nbsp; 容：</span><span class="mine-num">阳光理财一号</span></p>
+            <div class="heigh disnone clear">
+                <p class="p-1"><span class="mine-bian">收货人：</span><span class="mine-num">金刚不坏</span></p>
+                <p class="p-2"><span class="mine-bian">联系电话：</span><span class="mine-num">13135714787</span></p>
+            </div>
+            <p class="heigh"><span class="mine-bian">收获地址：</span><span class="mine-num">阳光理财一号</span></p>
+            <p class="heigh"><span class="mine-bian">备&nbsp;&nbsp; 注：</span><span class="mine-num">阳光理财一号</span></p>
+            <div class="heigh2 clear">
+                <div class="left">
+                    <div><img src="images/ioc.png" /></div>
+                    <div class="left-two">
+                        <p><span class="mine-bian">发布方：</span><span class="mine-num">悟空理财</span></p>
+                        <p><span class="mine-bian">电 &nbsp;&nbsp;话：</span><span class="mine-num">400-800-12345</span></p>
+                    </div>
+                </div>
+                <div class="right">
+                    <a href="#" tel="13135714787"><img src="images/call.png" /></a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <p class="heigh"><span class="mine-bian">订单号：</span><span class="mine-num">1029245476541554</span></p>
+            <div class="heigh disnone clear">
+                <p class="p-1"><span class="mine-bian">金&nbsp;&nbsp; 额：</span><span class="mine-num red">10000.00</span></p>
+                <p class="p-2"><span class="mine-bian">日&nbsp;&nbsp; 期：</span><span class="mine-num">2017-07-07 16:14:21</span></p>
+            </div>
+            <p class="heigh"><span class="mine-bian">内&nbsp;&nbsp; 容：</span><span class="mine-num">阳光理财一号</span></p>
+            <div class="heigh2 clear">
+                <div class="left">
+                    <div><img src="images/ioc.png" /></div>
+                    <div class="left-two">
+                        <p><span class="mine-bian">发布方：</span><span class="mine-num">悟空理财</span></p>
+                        <p><span class="mine-bian">电 &nbsp;&nbsp;话：</span><span class="mine-num">400-800-12345</span></p>
+                    </div>
+                </div>
+                <div class="right">
+                    <a href="#" tel="13135714787"><img src="images/call.png" /></a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <p class="heigh"><span class="mine-bian">订单号：</span><span class="mine-num">1029245476541554</span></p>
+            <div class="heigh disnone clear">
+                <p class="p-1"><span class="mine-bian">金&nbsp;&nbsp; 额：</span><span class="mine-num red">10000.00</span></p>
+                <p class="p-2"><span class="mine-bian">日&nbsp;&nbsp; 期：</span><span class="mine-num">2017-07-07 16:14:21</span></p>
+            </div>
+            <p class="heigh"><span class="mine-bian">内&nbsp;&nbsp; 容：</span><span class="mine-num">阳光理财一号</span></p>
+            <div class="heigh2 clear">
+                <div class="left">
+                    <div><img src="images/ioc.png" /></div>
+                    <div class="left-two">
+                        <p><span class="mine-bian">发布方：</span><span class="mine-num">悟空理财</span></p>
+                        <p><span class="mine-bian">电 &nbsp;&nbsp;话：</span><span class="mine-num">400-800-12345</span></p>
+                    </div>
+                </div>
+                <div class="right">
+                    <a href="#" tel="13135714787"><img src="images/call.png" /></a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <p class="heigh"><span class="mine-bian">订单号：</span><span class="mine-num">1029245476541554</span></p>
+            <div class="heigh disnone clear">
+                <p class="p-1"><span class="mine-bian">金&nbsp;&nbsp; 额：</span><span class="mine-num red">10000.00</span></p>
+                <p class="p-2"><span class="mine-bian">日&nbsp;&nbsp; 期：</span><span class="mine-num">2017-07-07 16:14:21</span></p>
+            </div>
+            <p class="heigh"><span class="mine-bian">内&nbsp;&nbsp; 容：</span><span class="mine-num">阳光理财一号</span></p>
+            <div class="heigh2 clear">
+                <div class="left">
+                    <div><img src="images/ioc.png" /></div>
+                    <div class="left-two">
+                        <p><span class="mine-bian">发布方：</span><span class="mine-num">悟空理财</span></p>
+                        <p><span class="mine-bian">电 &nbsp;&nbsp;话：</span><span class="mine-num">400-800-12345</span></p>
+                    </div>
+                </div>
+                <div class="right">
+                    <a href="#" tel="13135714787"><img src="images/call.png" /></a>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div id="pullUp">
+        <div class="pullUpLabel">加载更多</div>
+    </div>
+</div>
+<footer>
+    <ul>
+        <li>
+            <a href="my_youhui.html">优惠资讯</a>
+        </li>
+        <li>
+            <a href="my-plan.html">还款计划</a>
+        </li>
+        <li class="selected">
+            <a href="#">我的</a>
+        </li>
+    </ul>
+</footer>
+<!--jq-->
+<script src="js/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/iscoll5/build/iscroll.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/iscoll5/build/iscroll-probe.js" type="text/javascript" charset="utf-8"></script>
+</body>
+
+</html>

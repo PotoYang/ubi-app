@@ -1,0 +1,76 @@
+<resources>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorPrimary">@color/toolbar_bg</item>
+        <item name="colorPrimaryDark">@color/toolbar_bg</item>
+        <item name="android:homeAsUpIndicator">@null</item>
+        <item name="homeAsUpIndicator">@null</item>
+    </style>
+
+    <style name="AppTheme" parent="AppTheme.Base">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="MyAppTheme" parent="AppTheme">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="LauncherTheme" parent="AppTheme.Base">
+        <item name="android:windowBackground">@mipmap/launcher_bg</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="custom_toolbar_goback_text_style">
+        <item name="android:textSize">@dimen/toolbar_goback_text_size</item>
+        <item name="android:textColor">@color/color_white</item>
+    </style>
+
+    <style name="custom_toolbar_title_text">
+        <item name="android:textSize">@dimen/toolbar_text_size</item>
+        <item name="android:textColor">@color/color_white</item>
+    </style>
+
+    <style name="custom_toolbar_right_title_text">
+        <item name="android:textSize">@dimen/toolbar_right_text_size</item>
+        <item name="android:textColor">@color/color_white</item>
+    </style>
+
+    <style name="myProgressStyle">
+        <item name="android:indeterminateDrawable">@drawable/progress_white</item>
+    </style>
+
+    <style name="body_content_text_style">
+        <item name="android:textSize">@dimen/body_content_text</item>
+        <item name="android:textColor">@color/body_content_text</item>
+    </style>
+
+    <style name="input_edit_style" parent="body_content_text_style">
+        <item name="android:layout_height">@dimen/input_edit_height</item>
+        <item name="android:background">@drawable/input_edit_bg</item>
+        <item name="android:textColorHint">@color/color_gray</item>
+    </style>
+
+    <style name="btn_orange_style">
+        <item name="android:background">@drawable/btn_orange_bg</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/body_content_title_text</item>
+    </style>
+
+    <style name="body_content_text_gray_style">
+        <item name="android:textSize">@dimen/body_content_text</item>
+        <item name="android:textColor">@color/color_gray</item>
+    </style>
+
+    <style name="custom_tab_bootom_text_style" parent="body_content_text_style">
+        <item name="android:textSize">@dimen/tab_bottom_text_size</item>
+    </style>
+
+    <dimen name="body_content_title_text">16sp</dimen>
+</resources>

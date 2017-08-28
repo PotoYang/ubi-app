@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="textToolBarLeft" type="id" />
+    <item name="textToolBarTitle" type="id" />
+    <item name="textToolBarRight" type="id" />
+</resources>

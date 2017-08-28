@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="HomeTabView">
+        <attr name="select_tab_text_color" format="color" />
+        <attr name="default_tab_text_color" format="color" />
+    </declare-styleable>
+
+</resources>

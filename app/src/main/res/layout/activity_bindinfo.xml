@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/body_color"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <include layout="@layout/custom_toolbar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_padding" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/shape_wihte_frame"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/bindinfo_name" />
+
+            <EditText
+                android:id="@+id/etBindInfoName"
+                style="@style/input_edit_style"
+                android:layout_width="match_parent"
+                android:hint="@string/bind_info_name_hint"
+                android:paddingStart="@dimen/body_padding"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/bindinfo_idcard" />
+
+            <EditText
+                android:id="@+id/etBindInfoIdCard"
+                style="@style/input_edit_style"
+                android:layout_width="match_parent"
+                android:hint="@string/bind_info_idcard_hint"
+                android:maxLength="18"
+                android:paddingStart="@dimen/body_padding"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/bindinfo_carno" />
+
+            <EditText
+                android:id="@+id/etBindInfoCarNo"
+                style="@style/input_edit_style"
+                android:layout_width="match_parent"
+                android:hint="@string/bind_info_carno_hint"
+                android:paddingStart="@dimen/body_padding"
+                android:singleLine="true" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        style="@style/btn_orange_style"
+        android:layout_width="@dimen/login_btn_width"
+        android:layout_height="@dimen/login_btn_height"
+        android:layout_marginTop="30dp"
+        android:onClick="bindInfoClick"
+        android:text="@string/btnBindInfo" />
+
+</LinearLayout>

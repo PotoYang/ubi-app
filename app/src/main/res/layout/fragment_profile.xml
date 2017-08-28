@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/viewProfile"
+        layout="@layout/profile_toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/login_edit_height"
+                android:layout_weight="0.74"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="28dp"
+                    android:text="@string/profile_name"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editProfileName"
+                    style="@style/input_edit_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="@dimen/layout_padding"
+                    android:background="@drawable/shape_wihte_frame"
+                    android:ems="19"
+                    android:hint="@string/profile_name_hint"
+                    android:maxEms="20"
+                    android:maxLength="20"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnProfileUpdatePwd"
+                style="@style/btn_orange_style"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="0.26"
+                android:text="@string/profile_button_modify_pwd"
+                android:textSize="14dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/transparent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/login_edit_height"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="28dp"
+                android:text="电话"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editProfilePhone"
+                style="@style/input_edit_style"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/layout_padding"
+                android:background="@drawable/shape_wihte_frame"
+                android:ems="19"
+                android:hint="@string/profile_phone_hint"
+                android:inputType="phone"
+                android:maxEms="11"
+                android:maxLength="11"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/transparent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/login_edit_height"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="身份证号"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editProfileID"
+                style="@style/input_edit_style"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/layout_padding"
+                android:background="@drawable/shape_wihte_frame"
+                android:ems="19"
+                android:hint="@string/profile_ID_hint"
+                android:maxEms="18"
+                android:maxLength="18"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/transparent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/login_edit_height"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14dp"
+                android:text="车牌号"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editProfileVehicle"
+                style="@style/input_edit_style"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/layout_padding"
+                android:background="@drawable/shape_wihte_frame"
+                android:ems="19"
+                android:hint="@string/profile_vehicle_hint"
+                android:maxEms="18"
+                android:maxLength="18"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnProfileOrders"
+            style="@style/btn_orange_style"
+            android:layout_width="@dimen/login_btn_width"
+            android:layout_height="@dimen/login_btn_height"
+            android:layout_marginTop="30dp"
+            android:text="@string/profile_orders" />
+
+    </LinearLayout>
+
+</LinearLayout>

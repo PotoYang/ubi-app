@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/custom_toolbar_height">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/customToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/custom_toolbar_height"
+        android:background="@color/toolbar_bg"
+        android:gravity="center">
+
+        <LinearLayout
+            android:id="@+id/goBackLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingRight="5dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/go_back_icon" />
+
+            <TextView
+                android:id="@id/textToolBarLeft"
+                style="@style/custom_toolbar_goback_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/goback" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@id/textToolBarTitle"
+            style="@style/custom_toolbar_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/index" />
+
+        <TextView
+            android:id="@id/textToolBarRight"
+            style="@style/custom_toolbar_right_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp" />
+
+    </android.support.v7.widget.Toolbar>
+</RelativeLayout>
+

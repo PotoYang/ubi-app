@@ -9,8 +9,7 @@ import com.chh.yinbao.User;
 import com.chh.yinbao.config.UserData;
 import com.chh.yinbao.service.BaseImp;
 import com.chh.yinbao.service.http.HttpCallBack;
-import com.chh.yinbao.service.http.RetrofitProxyHandler;
-import com.chh.yinbao.service.http.RetrofitServiceProxy;
+import com.chh.yinbao.service.http.RetrofitEngine;
 import com.chh.yinbao.utils.InputVerifyUtils;
 import com.chh.yinbao.utils.SharedPreferencesUtils;
 import com.google.gson.Gson;
@@ -30,7 +29,10 @@ public class AccountServiceImpl extends BaseImp implements AccountService {
 
     public AccountServiceImpl(Context context) {
         this.context = context;
-        accountApi = new RetrofitServiceProxy(null, new RetrofitProxyHandler(this.context)).getProxy(AccountApi.class);
+//        accountApi = new RetrofitServiceProxy(null, new RetrofitProxyHandler(this.context)).getProxy(AccountApi.class);
+        accountApi = RetrofitEngine.getInstance().create(AccountApi.class);
+//        如果不需要经过自定义的过滤器
+
     }
 
     @Override
@@ -201,6 +203,21 @@ public class AccountServiceImpl extends BaseImp implements AccountService {
 
         System.out.println(new Gson().toJson(userInfo));
 
-        doRequest(accountApi.bindInfo(userInfo, token), callBack);
+        doRequest(accountApi.bindInfo(userInfo, userInfo.getToken()), callBack);
+    }
+
+    @Override
+    public void wxInfoBind(String unionId, String weixinNickName, String headImgUrl, HttpCallBack<Token> callBack) {
+        System.out.println(unionId + " " + weixinNickName + " " + headImgUrl);
+        Map<String, String> map = new HashMap<>();
+        map.put("unionId", unionId);
+        map.put("nickName", weixinNickName);
+        map.put("headImgUrl", headImgUrl);
+        doRequest(accountApi.wxInfoBind(unionId, weixinNickName, headImgUrl), callBack);
+    }
+
+    @Override
+    public void getWXBaseInfo(Map<String, String> map, HttpCallBack<>) {
+        doRequest(map, );
     }
 }

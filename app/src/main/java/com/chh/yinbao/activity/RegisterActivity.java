@@ -140,7 +140,7 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onSuccess(Object data) {
                 hideDialog();
-                MyToast.show(getApplicationContext(), "完成验证");
+//                MyToast.show(getApplicationContext(), "完成验证");
                 new AlertDialog.Builder(RegisterActivity.this).setTitle("点击下一步完成注册")
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
@@ -153,13 +153,13 @@ public class RegisterActivity extends BaseActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
                             }
-                        }).create().show();
+                        }).setCancelable(false).create().show();
             }
 
             @Override
             public void onError(int state, String message) {
                 hideDialog();
-                TSnackbarUtils.showTSnackbar(view, message + "验证失败，请重试...");
+//                TSnackbarUtils.showTSnackbar(view, message + "验证失败，请重试...");
             }
         };
 
@@ -187,9 +187,9 @@ public class RegisterActivity extends BaseActivity {
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
+                                toLoginActivity();
                             }
-                        }).create().show();
+                        }).setCancelable(false).create().show();
             }
 
             @Override

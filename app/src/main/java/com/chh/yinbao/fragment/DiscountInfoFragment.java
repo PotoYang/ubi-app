@@ -8,14 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.chh.yinbao.R;
-import com.chh.yinbao.utils.LogUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -26,8 +23,8 @@ import butterknife.ButterKnife;
 
 public class DiscountInfoFragment extends BaseFragment {
     private View rootView;
-    @Bind(R.id.webViewInfo)
-    WebView webViewInfo;
+    @Bind(R.id.discountWebView)
+    WebView webViewLoad;
 
     @Nullable
     @Override
@@ -43,46 +40,93 @@ public class DiscountInfoFragment extends BaseFragment {
 
     private void init() {
         initWebview();
-        webViewInfo.loadUrl("http://yinbao.senit.xyz:8080/yinbao/my_youhui.html");
+        webViewLoad.loadUrl(getString(R.string.my_youhui_html));
     }
 
     private void initWebview() {
-        webViewInfo.getSettings().setJavaScriptEnabled(true);//执行JS脚本
-        webViewInfo.getSettings().setAllowFileAccess(false);
-        webViewInfo.getSettings().setGeolocationEnabled(false);
+        WebSettings settings = webViewLoad.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);
+        settings.setGeolocationEnabled(false);
 
-        webViewInfo.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
-        webViewInfo.getSettings().setUseWideViewPort(true);
-        webViewInfo.getSettings().setLoadWithOverviewMode(true);
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setDomStorageEnabled(true);
 
-        webViewInfo.getSettings().setDomStorageEnabled(false);
-//        webView.getSettings().setBuiltInZoomControls(true);//设置使支持缩放
-        webViewInfo.setWebChromeClient(new WebChromeClient());
-        webViewInfo.setWebViewClient(new WebViewClient() {
+        settings.setAppCacheMaxSize(1024 * 1024 * 8);
+        String appCachePath = getContext().getCacheDir().getAbsolutePath();
+        settings.setAppCachePath(appCachePath);
+        settings.setAllowFileAccess(true);
+        settings.setAppCacheEnabled(true);
+
+        webViewLoad.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                url.startsWith();
-//                view.loadUrl(url);// 使用当前WebView处理跳转
-//                return true;//true表示此事件在此处被处理，不需要再广播
-                String tag = "my:tel";
-
-                if (url.contains(tag)) {
-                    String mobile = url.substring(url.lastIndexOf("/") + 1);
-                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mobile));
-                    startActivity(phoneIntent);
-                    //这个超连接,java已经处理了，webview不要处理了
-                    return true;
+//                if (url.contains("login.html")) {
+//                    AlertDialog.Builder b = new AlertDialog.Builder(LoadActivity.this);
+//                    b.setTitle("错误");
+//                    b.setMessage("登录过期");
+//                    b.setPositiveButton(getString(R.string.do_login), new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            ArouterUtils.startActivity(ActivityURL.LoginActivity);
+//                            finish();
+//                        }
+//                    });
+//                    b.setCancelable(false);
+//                    b.create().show();
+//                    return true;
+//                } else
+                if (url.startsWith("tel:")) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                } else {
+                    view.loadUrl(url);
                 }
-
-                return super.shouldOverrideUrlLoading(view, url);
+                return true;
             }
-
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                LogUtils.i("5454", "发生错误:" + error);
-            }
-
         });
+
+        webViewLoad.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if (newProgress == 100) {
+                    view.setVisibility(View.INVISIBLE);
+                    webViewLoad.loadUrl(getDomOperationStatements("footer"));
+                    webViewLoad.loadUrl(getDomOperationStatements("header"));
+                    webViewLoad.loadUrl(changeCSS("wrapper"));
+                    view.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+//    private void setData(WebView view) {
+//        String js = "window.localStorage.setItem(\"token\",\"" + token + "\")";
+//        System.out.println(js);
+//        view.evaluateJavascript(js, null);
+//    }
+
+    private String changeCSS(String id) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("javascript:(function() { ");
+        builder.append("var item = document.getElementById('").append(id).append("');");
+        builder.append("item.style.top = \"0px\";");
+        builder.append("item.style.bottom = \"0px\";");
+        builder.append("})()");
+        return builder.toString();
+    }
+
+    private String getDomOperationStatements(String ele) {
+        StringBuilder builder = new StringBuilder();
+        // add javascript prefix
+        builder.append("javascript:(function() { ");
+        builder.append("var item = document.getElementsByTagName('").append(ele).append("');");
+        builder.append("item[0].style.display=\"none\";");
+        // add javascript suffix
+        builder.append("})()");
+        return builder.toString();
     }
 
 //    @OnClick(R.id.ivCall)
@@ -102,4 +146,5 @@ public class DiscountInfoFragment extends BaseFragment {
 //        MyToast.show(getContext(), "注销成功");
 //        ArouterUtils.startActivity(ActivityURL.LoginActivity);
 //    }
+
 }

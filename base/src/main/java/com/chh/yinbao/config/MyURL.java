@@ -14,7 +14,7 @@ public class MyURL {
 //    public final static String BASE_HOST = "http://mo.ubi-china.com/";
 //    public final static String ISVR_HOST = "";
 //    public final static String BASE_HOST = "http://42.51.32.181/";
-    public final static String BASE_HOST = "http://yinbao.senit.xyz/";
+    public final static String BASE_HOST = "http://yinbao.chhgroup.cn/admin/";
     public final static String ISVR_HOST = "api/";
 //    http://192.168.0.106:8088/login/view
 
@@ -40,6 +40,8 @@ public class MyURL {
     public final static String resetPwd = "memberInfo/findPassword";
     //用户注册
     public final static String register = "member/mobile/regist";
+    //微信信息绑定
+    public final static String wxInfoBind = "weixin/app/oauth";
 
 
     //2.8.	获取车辆详细信息
@@ -119,6 +121,4 @@ public class MyURL {
     public final static String getWeather = "app/getWeather";
     //2.33.	记录行程轨迹
     public final static String recordTrack = "vehicle/recordTrack";
-
-
 }

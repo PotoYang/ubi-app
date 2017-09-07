@@ -64,7 +64,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
         Bundle bundle = getIntent().getExtras();
         String code = bundle.getString("code");
         if (code != null) {
-//            showProgressDialog("微信信息传递中" + code);
+            showProgressDialog("微信信息传递中...");
             userPresenter.getBaseWXInfo(code);
         }
 
@@ -89,8 +89,10 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @OnClick(R.id.ivWechat)
     public void weChatClick() {
+        showLoadDataDialog("");
         if (!FirstApplication.iwxapi.isWXAppInstalled()) {
             TSnackbarUtils.showTSnackbar(btnLogin, "您还未安装微信客户端");
+            hideLoadDataDialog();
             return;
         }
         final SendAuth.Req req = new SendAuth.Req();
@@ -116,30 +118,52 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void loginSuccess(final User data) {
-        System.out.println(data.getToken());
+        System.out.println(data.getToken() + " " + data.getName() + " " + data.getWeixinNickName() + " " + data.getPic());
         if (data.getIdCard() == null || data.getCarNo() == null) {
-            new AlertDialog.Builder(LoginActivity.this)
-                    .setTitle("登录成功，需进行信息绑定")
-                    .setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("userData", data);
-                            ArouterUtils.startActivity(bundle, ActivityURL.BinInfoActivity);
-                        }
-                    })
-                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .create()
-                    .show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+            if (data.isWeChat()) {
+                builder.setTitle("微信登录成功，需进行信息绑定");
+                builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        userPresenter.wxInfoBind(data.getName(), data.getWeixinNickName(), data.getPic());
+                    }
+                });
+                builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setCancelable(false);
+                builder.create();
+                builder.show();
+            } else {
+                builder.setTitle("个人信息不完整，继续完善个人信息");
+                builder.setPositiveButton(getString(R.string.continue_text), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("userData", data);
+                        ArouterUtils.startActivity(bundle, ActivityURL.BinInfoActivity);
+                    }
+                });
+                builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setCancelable(false);
+                builder.create();
+                builder.show();
+            }
+
         } else {
             Bundle bundle = new Bundle();
             bundle.putString("token", data.getToken());
             ArouterUtils.startActivity(bundle, ActivityURL.LoadActivity);
+//            ArouterUtils.startActivity(bundle, ActivityURL.MainActivity);
             finishWithAnim();
         }
     }

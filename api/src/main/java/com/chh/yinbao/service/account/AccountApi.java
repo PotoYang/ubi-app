@@ -21,7 +21,7 @@ import retrofit2.http.QueryMap;
 public interface AccountApi {
 
     @POST(MyURL.login)
-    Observable<Token> userLogin(@QueryMap Map<String, String> map);
+    Observable<Token> userLogin(@QueryMap(encoded = true) Map<String, String> map);
 
     @POST(MyURL.register)
     Observable<Object> register(@QueryMap Map<String, String> map);
@@ -47,4 +47,9 @@ public interface AccountApi {
 
     @POST(MyURL.bindInfo)
     Observable<Object> bindInfo(@Body User user, @Query("token") String token);
+
+    @POST(MyURL.wxInfoBind)
+    Observable<Token> wxInfoBind(@Query("unionId") String unionId,
+                                 @Query("weixinNickName") String weixinNickName,
+                                 @Query("headImgUrl") String headImgUrl);
 }

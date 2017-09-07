@@ -1,10 +1,8 @@
 package com.chh.yinbao.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -15,7 +13,9 @@ import com.chh.yinbao.R;
 import com.chh.yinbao.config.ActivityURL;
 import com.chh.yinbao.util.MyToast;
 import com.chh.yinbao.utils.AppManager;
-import com.chh.yinbao.utils.ArouterUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,11 +30,10 @@ public class LoadActivity extends BaseActivity {
     private final String TAG = LoadActivity.class.getSimpleName();
     private String token;
     private boolean isExit = false;
-
+    private Map<String, String> map = new HashMap<>();
+    private boolean initv = false;
     @Bind(R.id.webViewLoad)
     WebView webViewLoad;
-//    @Bind(R.id.btn_js)
-//    Button btn_js;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +42,14 @@ public class LoadActivity extends BaseActivity {
         ButterKnife.bind(this);
         showGoBackLayout();
         init();
-
     }
 
     private void init() {
         Bundle bundle = getIntent().getExtras();
         token = bundle.getString("token");
+        map.put("token", token);
         initWebview();
-        webViewLoad.loadUrl(getString(R.string.my_youhui_html));
+        webViewLoad.loadUrl(getString(R.string.my_youhui_html), map);
     }
 
     private void initWebview() {
@@ -73,57 +72,75 @@ public class LoadActivity extends BaseActivity {
         webViewLoad.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.contains("login.html")) {
-                    AlertDialog.Builder b = new AlertDialog.Builder(LoadActivity.this);
-                    b.setTitle("错误");
-                    b.setMessage("登录过期");
-                    b.setPositiveButton(getString(R.string.do_login), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ArouterUtils.startActivity(ActivityURL.LoginActivity);
-                            finish();
-                        }
-                    });
-                    b.setCancelable(false);
-                    b.create().show();
-                    return true;
+//                if (url.contains("login.html")) {
+//                    AlertDialog.Builder b = new AlertDialog.Builder(LoadActivity.this);
+//                    b.setTitle("错误");
+//                    b.setMessage("登录过期");
+//                    b.setPositiveButton(getString(R.string.do_login), new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            ArouterUtils.startActivity(ActivityURL.LoginActivity);
+//                            finish();
+//                        }
+//                    });
+//                    b.setCancelable(false);
+//                    b.create().show();
+//                    return true;
+//                } else
+                if (url.contains("my_plan.html")) {
+                    view.loadUrl(url, map);
                 } else if (url.startsWith("tel:")) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(url));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
                 } else {
-                    view.loadUrl(url);
+                    view.loadUrl(url, map);
                 }
                 return true;
             }
 
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                setData(view);
-            }
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                super.onPageFinished(view, url);
+//                if (!initv) {
+//                    setData(view);
+//                    initv = true;
+//                }
+//            }
         });
 
 //        webViewLoad.setWebChromeClient(new WebChromeClient() {
 //            @Override
-//            public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
-//                AlertDialog.Builder b = new AlertDialog.Builder(LoadActivity.this);
-//                b.setTitle("错误");
-//                b.setMessage(message);
-//                b.setPositiveButton(getString(R.string.do_login), new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-////                        result.confirm();
-//                        ArouterUtils.startActivity(ActivityURL.LoginActivity);
-//                        finish();
-//                    }
-//                });
-//                b.setCancelable(false);
-//                b.create().show();
-//                return true;
+//            public void onProgressChanged(WebView view, int newProgress) {
+//                if (newProgress == 100) {
+//                    view.setVisibility(View.INVISIBLE);
+//                    webViewLoad.loadUrl(getDomOperationStatements("footer"));
+//                    webViewLoad.loadUrl(getDomOperationStatements("header"));
+//                    webViewLoad.loadUrl(changeCSS("wrapper"));
+//                    view.setVisibility(View.VISIBLE);
+//                }
 //            }
-//
 //        });
+    }
+
+    private String changeCSS(String id) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("javascript:(function() { ");
+        builder.append("var item = document.getElementById('").append(id).append("');");
+        builder.append("item.style.top = \"0px\";");
+        builder.append("item.style.bottom = \"0px\";");
+        builder.append("})()");
+        return builder.toString();
+    }
+
+    private String getDomOperationStatements(String ele) {
+        StringBuilder builder = new StringBuilder();
+        // add javascript prefix
+        builder.append("javascript:(function() { ");
+        builder.append("var item = document.getElementsByTagName('").append(ele).append("');");
+        builder.append("item[0].style.display=\"none\";");
+        // add javascript suffix
+        builder.append("})()");
+        return builder.toString();
     }
 
     private void setData(WebView view) {
@@ -134,7 +151,6 @@ public class LoadActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        AppManager.getAppManager().finishAllActivity();
         if (keyCode == KeyEvent.KEYCODE_BACK && webViewLoad.canGoBack()) {
             webViewLoad.goBack();
             return true;

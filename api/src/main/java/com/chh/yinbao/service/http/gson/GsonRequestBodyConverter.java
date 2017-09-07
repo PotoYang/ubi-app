@@ -3,12 +3,16 @@ package com.chh.yinbao.service.http.gson;
 import com.chh.yinbao.utils.LogUtils;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import okio.Buffer;
 import retrofit2.Converter;
 
 /**
@@ -30,18 +34,18 @@ public final class GsonRequestBodyConverter<T> implements Converter<T, RequestBo
 
     @Override
     public RequestBody convert(T value) throws IOException {
-//        Buffer buffer = new Buffer();
-//        Writer writer = new OutputStreamWriter(buffer.outputStream(), UTF_8);
-//        JsonWriter jsonWriter = gson.newJsonWriter(writer);
-//        adapter.write(jsonWriter, value);
-//
-        String string = gson.toJson(value);
-        LogUtils.i("BB", string);
-//        LogUtils.i("BB", value.toString());
-//
-//        jsonWriter.close();
-//        return RequestBody.create(MEDIA_TYPE, buffer.readByteString());
+        Buffer buffer = new Buffer();
+        Writer writer = new OutputStreamWriter(buffer.outputStream(), UTF_8);
+        JsonWriter jsonWriter = gson.newJsonWriter(writer);
+        adapter.write(jsonWriter, value);
 
-        return RequestBody.create(MEDIA_TYPE, string);
+//        String string = gson.toJson(value);
+//        LogUtils.i("BB", string);
+        LogUtils.i("BB", value.toString());
+
+        jsonWriter.close();
+        return RequestBody.create(MEDIA_TYPE, buffer.readByteString());
+//
+//        return RequestBody.create(MEDIA_TYPE, string);
     }
 }

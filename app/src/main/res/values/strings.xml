@@ -73,5 +73,7 @@
     <string name="code_unknown">发送返回</string>
     <string name="exit_warm">再按一次退出</string>
     <string name="my_youhui_html">http://yinbao.chhgroup.cn/yinbao/my_youhui.html</string>
+    <string name="my_plan_html">http://yinbao.chhgroup.cn/yinbao/my_plan.html</string>
+    <string name="continue_text">继续</string>
 
 </resources>

@@ -10,7 +10,7 @@ public class User implements Serializable {
 
     private String carNo;
     private int comeFrom;
-    private String craeteTime;
+    private String createTime;
     private int id;
     private String idCard;
     private String mobile;
@@ -20,6 +20,15 @@ public class User implements Serializable {
     private int sex;
     private int status;
     private String weixinNickName;
+    private boolean isWeChat = false;
+
+    public boolean isWeChat() {
+        return isWeChat;
+    }
+
+    public void setWeChat(boolean weChat) {
+        isWeChat = weChat;
+    }
 
     public String getToken() {
         return token;
@@ -47,12 +56,12 @@ public class User implements Serializable {
         this.comeFrom = comeFrom;
     }
 
-    public String getCraeteTime() {
-        return craeteTime;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setCraeteTime(String craeteTime) {
-        this.craeteTime = craeteTime;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     public int getId() {

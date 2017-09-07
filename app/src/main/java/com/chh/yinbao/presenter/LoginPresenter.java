@@ -8,21 +8,16 @@ import com.chh.yinbao.config.Config;
 import com.chh.yinbao.config.UserData;
 import com.chh.yinbao.service.account.AccountService;
 import com.chh.yinbao.service.account.AccountServiceImpl;
-import com.chh.yinbao.service.account.WeixinApi;
 import com.chh.yinbao.service.http.HttpCallBack;
 import com.chh.yinbao.view.LoginView;
 import com.chh.yinbao.weixin.WXBaseInfo;
 import com.chh.yinbao.weixin.WXUserInfo;
-import com.google.gson.Gson;
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by potoyang on 2017/8/7.
@@ -59,6 +54,27 @@ public class LoginPresenter extends BasePresenter {
         this.objReferenceList.add(callBack);
     }
 
+    public void wxInfoBind(String unionId, String nickName, String headImgUrl) {
+        userView.showLoadDataDialog("绑定中...");
+        HttpCallBack<Token> callBack = new HttpCallBack<Token>() {
+            @Override
+            public void onSuccess(Token data) {
+                userView.hideLoadDataDialog();
+                User user = new User();
+                user.setToken(data.getToken());
+                userView.loginSuccess(user);
+            }
+
+            @Override
+            public void onError(int state, String message) {
+                userView.hideLoadDataDialog();
+                userView.loginError(message);
+            }
+        };
+        accountService.wxInfoBind(unionId, nickName, headImgUrl, callBack);
+        this.objReferenceList.add(callBack);
+    }
+
     private void getUserInfo() {
         final String token = UserData.getToken(context);
         HttpCallBack<User> callBack = new HttpCallBack<User>() {
@@ -77,14 +93,49 @@ public class LoginPresenter extends BasePresenter {
         this.objReferenceList.add(callBack);
     }
 
-    public void getBaseWXInfo(String code) {
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.weixin.qq.com/")
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(new Gson()))
-                .build();
+//    public void getBaseWXInfo(String code) {
+//        final Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("https://api.weixin.qq.com/")
+//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .addConverterFactory(GsonConverterFactory.create(new Gson()))
+//                .build();
+//
+//        WeixinApi weixin = retrofit.create(WeixinApi.class);
+//        Map<String, String> map = new HashMap<>();
+//        map.put("appid", Config.WX_APP_ID);
+//        map.put("secret", Config.WX_APP_SECRET);
+//        map.put("code", code);
+//        map.put("grant_type", "authorization_code");
+//
+//        HttpCallBack<WXBaseInfo> callBack = new HttpCallBack<WXBaseInfo>() {
+//            @Override
+//            public void onSuccess(WXBaseInfo data) {
+//                userView.hideLoadDataDialog();
+//                getWXUserInfo(data.getAccess_token(), data.getOpenid(), retrofit);
+//            }
+//
+//            @Override
+//            public void onError(int state, String message) {
+//                userView.hideLoadDataDialog();
+//                userView.loginError(message);
+//            }
+//        };
+//
+//        weixin.getWXBaseInfo(map)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(callBack);
+//
+//        this.objReferenceList.add(callBack);
+//    }
 
-        WeixinApi weixin = retrofit.create(WeixinApi.class);
+    public void getBaseWXInfo(String code) {
+//        final Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("https://api.weixin.qq.com/")
+//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .addConverterFactory(GsonConverterFactory.create(new Gson()))
+//                .build();
+
         Map<String, String> map = new HashMap<>();
         map.put("appid", Config.WX_APP_ID);
         map.put("secret", Config.WX_APP_SECRET);
@@ -95,7 +146,7 @@ public class LoginPresenter extends BasePresenter {
             @Override
             public void onSuccess(WXBaseInfo data) {
                 userView.hideLoadDataDialog();
-                getWXUserInfo(data.getAccess_token(), data.getOpenid(), retrofit);
+                getWXUserInfo(data.getAccess_token(), data.getOpenid());
             }
 
             @Override
@@ -105,16 +156,18 @@ public class LoginPresenter extends BasePresenter {
             }
         };
 
-        weixin.getWXBaseInfo(map)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(callBack);
+        accountService.getWXBaseInfo(map, callBack);
+
+//        weixin.getWXBaseInfo(map)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(callBack);
 
         this.objReferenceList.add(callBack);
     }
 
-    private void getWXUserInfo(String access_token, String openid, Retrofit retrofit) {
-        WeixinApi wx = retrofit.create(WeixinApi.class);
+    private void getWXUserInfo(String access_token, String openid) {
+//        WeixinApi wx = retrofit.create(WeixinApi.class);
         Map<String, String> map = new HashMap<>();
         map.put("access_token", access_token);
         map.put("openid", openid);
@@ -123,8 +176,10 @@ public class LoginPresenter extends BasePresenter {
             @Override
             public void onSuccess(WXUserInfo data) {
                 User user = new User();
+                user.setWeChat(true);
+                user.setName(data.getUnionid());
+                user.setPic(data.getHeadimgurl());
                 user.setWeixinNickName(data.getNickname());
-                user.setSex(data.getSex());
                 userView.loginSuccess(user);
             }
 

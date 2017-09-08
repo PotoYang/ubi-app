@@ -182,7 +182,9 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        AppManager.getAppManager().finishAllActivity();
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            AppManager.getAppManager().finishAllActivity();
+        }
         return super.onKeyDown(keyCode, event);
     }
 }

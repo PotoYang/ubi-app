@@ -48,6 +48,7 @@ public class LoadActivity extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         token = bundle.getString("token");
         map.put("token", token);
+        System.out.println(token);
         initWebview();
         webViewLoad.loadUrl(getString(R.string.my_youhui_html), map);
     }
@@ -98,14 +99,14 @@ public class LoadActivity extends BaseActivity {
                 return true;
             }
 
-//            @Override
-//            public void onPageFinished(WebView view, String url) {
-//                super.onPageFinished(view, url);
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
 //                if (!initv) {
-//                    setData(view);
+                setData(view);
 //                    initv = true;
 //                }
-//            }
+            }
         });
 
 //        webViewLoad.setWebChromeClient(new WebChromeClient() {

@@ -12,7 +12,6 @@ import com.chh.yinbao.service.http.HttpCallBack;
 import com.chh.yinbao.service.http.RetrofitEngine;
 import com.chh.yinbao.utils.InputVerifyUtils;
 import com.chh.yinbao.utils.SharedPreferencesUtils;
-import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -181,11 +180,11 @@ public class AccountServiceImpl extends BaseImp implements AccountService {
     }
 
     @Override
-    public void bindInfo(User user, String name, String idCard, String carNo, String token, HttpCallBack<Object> callBack) {
-        if (TextUtils.isEmpty(name) || !InputVerifyUtils.isChinese(name)) {
-            callBack.onError(-1, "姓名不正确");
-            return;
-        }
+    public void bindInfo(String name, String idCard, String carNo, String token, HttpCallBack<Object> callBack) {
+//        if (TextUtils.isEmpty(name) || !InputVerifyUtils.isChinese(name)) {
+//            callBack.onError(-1, "姓名不正确");
+//            return;
+//        }
         if (TextUtils.isEmpty(idCard) || !InputVerifyUtils.isId(idCard)) {
             callBack.onError(-1, "身份证号不正确");
             return;
@@ -195,15 +194,12 @@ public class AccountServiceImpl extends BaseImp implements AccountService {
             return;
         }
 
-        //姓名不能为空？？
-        User userInfo = user;
-        userInfo.setName(name);
-        userInfo.setIdCard(idCard);
-        userInfo.setCarNo(carNo);
+        Map<String, String> map = new HashMap<>();
+        map.put("name", name);
+        map.put("idCard", idCard);
+        map.put("carNo", carNo);
 
-        System.out.println(new Gson().toJson(userInfo));
-
-        doRequest(accountApi.bindInfo(userInfo, userInfo.getToken()), callBack);
+        doRequest(accountApi.bindInfo(token, map), callBack);
     }
 
     @Override
@@ -213,11 +209,6 @@ public class AccountServiceImpl extends BaseImp implements AccountService {
         map.put("unionId", unionId);
         map.put("nickName", weixinNickName);
         map.put("headImgUrl", headImgUrl);
-        doRequest(accountApi.wxInfoBind(unionId, weixinNickName, headImgUrl), callBack);
-    }
-
-    @Override
-    public void getWXBaseInfo(Map<String, String> map, HttpCallBack<>) {
-        doRequest(map, );
+        doRequest(accountApi.wxInfoBind(map), callBack);
     }
 }

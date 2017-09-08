@@ -5,15 +5,14 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.chh.yinbao.R;
 import com.chh.yinbao.User;
 import com.chh.yinbao.config.ActivityURL;
-import com.chh.yinbao.config.UserData;
-
-import com.chh.yinbao.R;
-import com.chh.yinbao.util.MyToast;
 import com.chh.yinbao.service.account.AccountService;
 import com.chh.yinbao.service.account.AccountServiceImpl;
 import com.chh.yinbao.service.http.HttpCallBack;
+import com.chh.yinbao.util.MyToast;
+import com.chh.yinbao.utils.ArouterUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,6 +33,7 @@ public class BindInfoActivity extends BaseActivity {
     EditText etBindInfoCarNo;
 
     AccountService accountService;
+
     private User user;
 
     @Override
@@ -58,12 +58,16 @@ public class BindInfoActivity extends BaseActivity {
         String name = etBindInfoName.getText().toString().trim();
         String idCard = etBindInfoIdCard.getText().toString().trim();
         String carNo = etBindInfoCarNo.getText().toString().trim();
-        String token = UserData.getToken(getApplicationContext());
+        final String token = user.getToken();
 
         HttpCallBack<Object> callBack = new HttpCallBack<Object>() {
             @Override
             public void onSuccess(Object data) {
-                MyToast.show(getApplicationContext(), "成功");
+                MyToast.show(getApplicationContext(), "绑定成功!");
+                Bundle bundle = new Bundle();
+                bundle.putString("token", token);
+                ArouterUtils.startActivity(bundle, ActivityURL.LoadActivity);
+                finish();
             }
 
             @Override
@@ -72,6 +76,6 @@ public class BindInfoActivity extends BaseActivity {
             }
         };
 
-        accountService.bindInfo(user, name, idCard, carNo, token, callBack);
+        accountService.bindInfo(name, idCard, carNo, token, callBack);
     }
 }

@@ -3,9 +3,6 @@ package com.chh.yinbao.service.account;
 import com.chh.yinbao.Token;
 import com.chh.yinbao.User;
 import com.chh.yinbao.service.http.HttpCallBack;
-import com.chh.yinbao.weixin.WXBaseInfo;
-
-import java.util.Map;
 
 /**
  * Created by potoyang on 2017/8/7.
@@ -39,11 +36,8 @@ public interface AccountService {
     void getUserInfo(String token, HttpCallBack<User> callBack);
 
     //绑定用户信息
-    void bindInfo(User user, String name, String idCard, String carNo, String token, HttpCallBack<Object> callBack);
+    void bindInfo(String name, String idCard, String carNo, String token, HttpCallBack<Object> callBack);
 
     //绑定用户微信信息
     void wxInfoBind(String unionId, String weixinNickName, String headImgUrl, HttpCallBack<Token> callBack);
-
-    //获取用户微信基本信息
-    void getWXBaseInfo(Map<String, String> map, HttpCallBack<WXBaseInfo> callBack);
 }

@@ -8,7 +8,6 @@ import com.chh.yinbao.config.MyURL;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -46,10 +45,8 @@ public interface AccountApi {
     Observable<Object> updatePwd(@QueryMap Map<String, String> map);
 
     @POST(MyURL.bindInfo)
-    Observable<Object> bindInfo(@Body User user, @Query("token") String token);
+    Observable<Object> bindInfo(@Query("token") String token, @QueryMap Map<String, String> map);
 
     @POST(MyURL.wxInfoBind)
-    Observable<Token> wxInfoBind(@Query("unionId") String unionId,
-                                 @Query("weixinNickName") String weixinNickName,
-                                 @Query("headImgUrl") String headImgUrl);
+    Observable<Token> wxInfoBind(@QueryMap Map<String, String> map);
 }

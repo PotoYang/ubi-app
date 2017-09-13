@@ -1,8 +1,11 @@
 package com.chh.yinbao.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -10,9 +13,16 @@ import android.webkit.WebViewClient;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.chh.yinbao.R;
+import com.chh.yinbao.Token;
 import com.chh.yinbao.config.ActivityURL;
+import com.chh.yinbao.config.UserData;
+import com.chh.yinbao.service.account.AccountService;
+import com.chh.yinbao.service.account.AccountServiceImpl;
+import com.chh.yinbao.service.http.HttpCallBack;
 import com.chh.yinbao.util.MyToast;
 import com.chh.yinbao.utils.AppManager;
+import com.chh.yinbao.utils.ArouterUtils;
+import com.chh.yinbao.utils.SharedPreferencesUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +60,8 @@ public class LoadActivity extends BaseActivity {
         map.put("token", token);
         System.out.println(token);
         initWebview();
-        webViewLoad.loadUrl(getString(R.string.my_youhui_html), map);
+//        webViewLoad.loadUrl(getString(R.string.my_youhui_html), map);
+        webViewLoad.loadUrl(getString(R.string.my_youhui_html));
     }
 
     private void initWebview() {
@@ -73,39 +84,48 @@ public class LoadActivity extends BaseActivity {
         webViewLoad.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                if (url.contains("login.html")) {
-//                    AlertDialog.Builder b = new AlertDialog.Builder(LoadActivity.this);
-//                    b.setTitle("错误");
-//                    b.setMessage("登录过期");
-//                    b.setPositiveButton(getString(R.string.do_login), new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            ArouterUtils.startActivity(ActivityURL.LoginActivity);
-//                            finish();
-//                        }
-//                    });
-//                    b.setCancelable(false);
-//                    b.create().show();
-//                    return true;
+                if (url.contains("login.html")) {
+                    AlertDialog.Builder b = new AlertDialog.Builder(LoadActivity.this);
+                    b.setTitle("登录过期");
+                    b.setMessage("是否重新登录?");
+                    b.setPositiveButton(R.string.re_login, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            isInfoSaved();
+                        }
+                    });
+                    b.setNegativeButton("退出", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferencesUtils.removeValue(getApplicationContext(), UserData.USER_PWD);
+                            AppManager.getAppManager().finishAllActivity();
+                        }
+                    });
+                    b.setCancelable(false);
+                    b.create().show();
+                    return true;
+                } else
+//                if (url.contains("my_plan.html")) {
+//                    view.loadUrl(url, map);
+//                    view.loadUrl(url);
 //                } else
-                if (url.contains("my_plan.html")) {
-                    view.loadUrl(url, map);
-                } else if (url.startsWith("tel:")) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(intent);
-                } else {
-                    view.loadUrl(url, map);
-                }
+                    if (url.startsWith("tel:")) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        startActivity(intent);
+                    } else {
+//                    view.loadUrl(url, map);
+                        view.loadUrl(url);
+                    }
                 return true;
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-//                if (!initv) {
-                setData(view);
-//                    initv = true;
-//                }
+                if (!initv) {
+                    setData(view);
+                    initv = true;
+                }
             }
         });
 
@@ -123,31 +143,69 @@ public class LoadActivity extends BaseActivity {
 //        });
     }
 
-    private String changeCSS(String id) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("javascript:(function() { ");
-        builder.append("var item = document.getElementById('").append(id).append("');");
-        builder.append("item.style.top = \"0px\";");
-        builder.append("item.style.bottom = \"0px\";");
-        builder.append("})()");
-        return builder.toString();
-    }
-
-    private String getDomOperationStatements(String ele) {
-        StringBuilder builder = new StringBuilder();
-        // add javascript prefix
-        builder.append("javascript:(function() { ");
-        builder.append("var item = document.getElementsByTagName('").append(ele).append("');");
-        builder.append("item[0].style.display=\"none\";");
-        // add javascript suffix
-        builder.append("})()");
-        return builder.toString();
-    }
+//    private String changeCSS(String id) {
+//        StringBuilder builder = new StringBuilder();
+//        builder.append("javascript:(function() { ");
+//        builder.append("var item = document.getElementById('").append(id).append("');");
+//        builder.append("item.style.top = \"0px\";");
+//        builder.append("item.style.bottom = \"0px\";");
+//        builder.append("})()");
+//        return builder.toString();
+//    }
+//
+//    private String getDomOperationStatements(String ele) {
+//        StringBuilder builder = new StringBuilder();
+//        // add javascript prefix
+//        builder.append("javascript:(function() { ");
+//        builder.append("var item = document.getElementsByTagName('").append(ele).append("');");
+//        builder.append("item[0].style.display=\"none\";");
+//        // add javascript suffix
+//        builder.append("})()");
+//        return builder.toString();
+//    }
 
     private void setData(WebView view) {
         String js = "window.localStorage.setItem(\"token\",\"" + token + "\")";
         System.out.println(js);
         view.evaluateJavascript(js, null);
+    }
+
+    private void isInfoSaved() {
+        String username = SharedPreferencesUtils.getDecryptValue(getApplicationContext(), UserData.USER_NAME);
+        String password = SharedPreferencesUtils.getDecryptValue(getApplicationContext(), UserData.USER_PWD);
+        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+            showProgressDialog("重新登录中...");
+
+            AccountService accountService = new AccountServiceImpl(getApplicationContext());
+
+            HttpCallBack<Token> callBack = new HttpCallBack<Token>() {
+                @Override
+                public void onSuccess(Token data) {
+                    token = data.getToken();
+                    hideProgressDialog();
+                    MyToast.show(getApplicationContext(), "免密登录成功!");
+                    Bundle bundle = new Bundle();
+                    bundle.putString("token", data.getToken());
+                    finish();
+                    ArouterUtils.startActivity(bundle, ActivityURL.LoadActivity);
+//                    toHomeActivity(data.getToken());
+                }
+
+                @Override
+                public void onError(int state, String message) {
+                    MyToast.show(getApplicationContext(), "免密登录失败!");
+                    ArouterUtils.startActivity(ActivityURL.LoginActivity);
+                    finish();
+                }
+            };
+
+            accountService.login(username, password, true, callBack);
+        } else {
+//            toLoginActivity();
+//            ArouterUtils.startActivity(ActivityURL.LoginActivity);
+            ArouterUtils.startActivity(ActivityURL.LoginActivity);
+            finish();
+        }
     }
 
     @Override
@@ -181,5 +239,4 @@ public class LoadActivity extends BaseActivity {
             }
         }).start();
     }
-
 }

@@ -8,6 +8,7 @@ import com.chh.yinbao.config.MyURL;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -20,7 +21,8 @@ import retrofit2.http.QueryMap;
 public interface AccountApi {
 
     @POST(MyURL.login)
-    Observable<Token> userLogin(@QueryMap(encoded = true) Map<String, String> map);
+    Observable<Token> userLogin(@Query("mobile") String mobile, @Query("password") String password);
+//    Observable<Token> userLogin(@QueryMap(encoded = true) Map<String, String> map);
 
     @POST(MyURL.register)
     Observable<Object> register(@QueryMap Map<String, String> map);
@@ -30,7 +32,7 @@ public interface AccountApi {
     Observable<TokenList> refreshToken(@QueryMap Map<String, String> map);
 
     @GET(MyURL.getUserInfo)
-    Observable<User> getUserInfo(@QueryMap Map<String, String> map);
+    Observable<User> getUserInfo(@QueryMap Map<String, String> token);
 
     @GET(MyURL.sendSmsCode)
     Observable<Object> sendSmsCode(@Query("mobile") String mobile, @Query("type") int type);
@@ -45,7 +47,7 @@ public interface AccountApi {
     Observable<Object> updatePwd(@QueryMap Map<String, String> map);
 
     @POST(MyURL.bindInfo)
-    Observable<Object> bindInfo(@Query("token") String token, @QueryMap Map<String, String> map);
+    Observable<Object> bindInfo(@Query("token") String token, @Body User user);
 
     @POST(MyURL.wxInfoBind)
     Observable<Token> wxInfoBind(@QueryMap Map<String, String> map);

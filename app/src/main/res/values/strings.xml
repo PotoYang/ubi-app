@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">first</string>
+    <string name="app_name">银保</string>
     <string name="goback">返回</string>
     <string name="index">首页</string>
     <string name="loading_msg">加载中...</string>
@@ -75,5 +75,9 @@
     <string name="my_youhui_html">http://yinbao.chhgroup.cn/yinbao/my_youhui.html</string>
     <string name="my_plan_html">http://yinbao.chhgroup.cn/yinbao/my_plan.html</string>
     <string name="continue_text">继续</string>
+
+    <string name="copyright">&#169;</string>
+    <string name="company_name_text">深圳市创辉煌信息科技有限公司</string>
+    <string name="re_login">重新登录</string>
 
 </resources>

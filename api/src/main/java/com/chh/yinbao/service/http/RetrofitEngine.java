@@ -8,12 +8,24 @@ import com.google.gson.Gson;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Locale;
 
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
+import okio.Buffer;
 import retrofit2.Retrofit;
+
+import static com.chh.yinbao.service.http.RetrofitEngine.LogInterceptor.genericClient;
+
+//import static com.chh.yinbao.service.http.RetrofitEngine.LogInterceptor.genericClient;
+
+//import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by potoyang on 2017/8/7.
@@ -35,27 +47,31 @@ public class RetrofitEngine {
             //设定日志级别
 //            httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             //自定义OkHttpClient
-            OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder();
+//            OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder();
+            OkHttpClient okHttpClient = genericClient();
             //添加拦截器
 //            okHttpClient.addInterceptor(httpLoggingInterceptor);
-            okHttpClient.addInterceptor(new LogInterceptor());
+//            okHttpClient.addInterceptor(new LogInterceptor());
 
             retrofit = new Retrofit.Builder().baseUrl(MyURL.BASE_HOST + MyURL.ISVR_HOST)
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//引入RxJava支持:
                     .addConverterFactory(GsonConverterFactory.create(new Gson()))//gson转换支持
-                    .client(okHttpClient.build())
+//                    .client(okHttpClient.build())
+                    .client(okHttpClient)
                     .build();
         }
         return retrofit;
     }
 
-    private static class LogInterceptor implements Interceptor {
+    static class LogInterceptor implements Interceptor {
         private final String TAG = "OKHTTP";
 
         @Override
         public okhttp3.Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
-            Log.v(TAG, "request:" + request.toString());
+            MediaType m = request.body().contentType();
+
+            Log.v(TAG, "request:" + request.toString() + " " + m);
             long t1 = System.nanoTime();
             okhttp3.Response response = chain.proceed(chain.request());
             long t2 = System.nanoTime();
@@ -67,6 +83,48 @@ public class RetrofitEngine {
             return response.newBuilder()
                     .body(okhttp3.ResponseBody.create(mediaType, content))
                     .build();
+        }
+
+        static OkHttpClient genericClient() {
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+            OkHttpClient httpClient = new OkHttpClient.Builder()
+                    .addInterceptor(new Interceptor() {
+                        @Override
+                        public Response intercept(Chain chain) throws IOException {
+                            Request request = chain.request();
+                            Request.Builder requestBuilder = request.newBuilder();
+                            if (request.method().equals("GET")) {
+                                request = requestBuilder.get()
+                                        .build();
+//                            System.out.println(request.body().contentType());
+                                return chain.proceed(request);
+                            } else {
+                                request = requestBuilder.post(RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                                        URLDecoder.decode(bodyToString(request.body()), "UTF-8")))
+                                        .build();
+                                System.out.println("request: " + request.body().contentType());
+                                return chain.proceed(request);
+                            }
+                        }
+                    })
+                    .addInterceptor(logging)
+                    .build();
+            return httpClient;
+        }
+
+        private static String bodyToString(final RequestBody request) {
+            try {
+                final RequestBody copy = request;
+                final Buffer buffer = new Buffer();
+                if (copy != null)
+                    copy.writeTo(buffer);
+                else
+                    return "";
+                return buffer.readUtf8();
+            } catch (final IOException e) {
+                return "did not work";
+            }
         }
     }
 }

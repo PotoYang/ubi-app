@@ -49,6 +49,7 @@ public class LauncherActivity extends BaseActivity {
         } else {
 //            toLoginActivity();
             ArouterUtils.startActivity(ActivityURL.LoginActivity);
+            finish();
         }
     }
 
@@ -62,6 +63,7 @@ public class LauncherActivity extends BaseActivity {
             @Override
             public void onError(int state, String message) {
                 ArouterUtils.startActivity(ActivityURL.LoginActivity);
+                finish();
             }
         };
         userService.login(username, password, true, callBack);
@@ -71,6 +73,7 @@ public class LauncherActivity extends BaseActivity {
         Bundle bundle = new Bundle();
         bundle.putString("token", token);
         ArouterUtils.startActivity(bundle, ActivityURL.LoadActivity);
+        finish();
     }
 
 }

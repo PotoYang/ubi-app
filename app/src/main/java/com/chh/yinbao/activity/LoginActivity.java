@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.utils.TextUtils;
@@ -46,6 +47,11 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     @Bind(R.id.rememberPwd)
     CheckBox rememberPwd;
 
+    @Bind(R.id.tvCopyright)
+    TextView tv_copyright;
+    @Bind(R.id.tvCompany)
+    TextView tv_company;
+
     private LoginPresenter userPresenter;
 
     @Override
@@ -58,6 +64,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     }
 
     private void init() {
+        tv_copyright.setText("Copyright " + getString(R.string.copyright) + " 2015");
+        tv_company.setText(R.string.company_name_text);
         setToolBarLeftText(getString(R.string.exit));
         setToolbarTitleText(getString(R.string.login_title));
         setToolBarRightText(getString(R.string.login_register), ActivityURL.RegisterActivity);
@@ -76,7 +84,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     public void loginClick(View view) {
 //        ArouterUtils.startActivity(ActivityURL.MainActivity);
-        userPresenter.userLogin(etLoginMobile.getText().toString().trim(), etLoginPassword.getText().toString().trim(), rememberPwd.isChecked());
+        userPresenter.userLogin(etLoginMobile.getText().toString().trim(),
+                etLoginPassword.getText().toString().trim(), rememberPwd.isChecked());
     }
 
     public void registerClick(View view) {

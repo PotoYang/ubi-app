@@ -31,7 +31,6 @@ public class AccountServiceImpl extends BaseImp implements AccountService {
 //        accountApi = new RetrofitServiceProxy(null, new RetrofitProxyHandler(this.context)).getProxy(AccountApi.class);
         accountApi = RetrofitEngine.getInstance().create(AccountApi.class);
 //        如果不需要经过自定义的过滤器
-
     }
 
     @Override
@@ -44,10 +43,7 @@ public class AccountServiceImpl extends BaseImp implements AccountService {
             callBack.onError(-1, "密码不允许为空");
             return;
         }
-        Map<String, String> map = new HashMap<>();
-        map.put("mobile", mobile);
-        map.put("password", password);
-        doRequest(accountApi.userLogin(map)
+        doRequest(accountApi.userLogin(mobile, password)
                 .map(new Function<Token, Token>() {
                     @Override
                     public Token apply(@Nullable Token token) throws Exception {
@@ -194,12 +190,17 @@ public class AccountServiceImpl extends BaseImp implements AccountService {
             return;
         }
 
-        Map<String, String> map = new HashMap<>();
-        map.put("name", name);
-        map.put("idCard", idCard);
-        map.put("carNo", carNo);
+//        Map<String, String> map = new HashMap<>();
+//        map.put("name", name);
+//        map.put("idCard", idCard);
+//        map.put("carNo", carNo);
 
-        doRequest(accountApi.bindInfo(token, map), callBack);
+        User user = new User();
+        user.setName(name);
+        user.setIdCard(idCard);
+        user.setCarNo(carNo);
+
+        doRequest(accountApi.bindInfo(token, user), callBack);
     }
 
     @Override
